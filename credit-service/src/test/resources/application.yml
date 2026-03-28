@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: credit-service
+  profiles:
+    active: test
+  config:
+    import: optional:configserver:http://host.docker.internal:8888
+  cloud:
+    config:
+      discovery:
+        enabled: false
+        service-id: config-server
+
+credit:
+  customer-service:
+    base-url: http://localhost:7002
+
+security:
+  jwt:
+    secret: test_secret_for_jwt_32_chars_minimum
+

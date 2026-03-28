@@ -1,0 +1,3 @@
+com\nttdata\creditservice\domain\service\impl\CreditServiceImplTest.class
+com\nttdata\creditservice\api\TestConfig.class
+com\nttdata\creditservice\api\CreditApiIntegrationTest.class

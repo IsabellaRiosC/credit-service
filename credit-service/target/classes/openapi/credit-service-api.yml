@@ -1,0 +1,172 @@
+openapi: 3.0.3
+info:
+  title: Credit Service API
+  description: Contract-first API for credits
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:7004
+
+tags:
+  - name: Credits
+    description: Credit operations
+
+paths:
+  /api/credits:
+    post:
+      tags: [Credits]
+      operationId: createCredit
+      summary: Create credit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCreditRequest'
+      responses:
+        '201':
+          description: Credit created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponse'
+    get:
+      tags: [Credits]
+      operationId: getCredits
+      summary: List credits
+      parameters:
+        - name: customerId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Credit list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditResponse'
+
+  /api/credits/{creditId}:
+    get:
+      tags: [Credits]
+      operationId: getCreditById
+      summary: Get credit by id
+      parameters:
+        - name: creditId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Credit found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponse'
+    put:
+      tags: [Credits]
+      operationId: updateCredit
+      summary: Update credit
+      parameters:
+        - name: creditId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCreditRequest'
+      responses:
+        '200':
+          description: Credit updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponse'
+    delete:
+      tags: [Credits]
+      operationId: deleteCredit
+      summary: Delete credit
+      parameters:
+        - name: creditId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Credit deleted
+
+  /api/credits/{creditId}/operations:
+    post:
+      tags: [Credits]
+      operationId: operateBalance
+      summary: Apply balance operation
+      parameters:
+        - name: creditId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceOperationRequest'
+      responses:
+        '200':
+          description: Operation applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponse'
+
+components:
+  schemas:
+    CreateCreditRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+        amount:
+          type: number
+          format: double
+    UpdateCreditRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+    BalanceOperationRequest:
+      type: object
+      properties:
+        operationType:
+          type: string
+        amount:
+          type: number
+          format: double
+    CreditResponse:
+      type: object
+      properties:
+        creditId:
+          type: string
+        customerId:
+          type: string
+        amount:
+          type: number
+          format: double
+        balance:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
